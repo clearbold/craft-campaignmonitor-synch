@@ -3,7 +3,7 @@
  * @link      https://github.com/clearbold/craft-campaignmonitor-lsynchists
  * @copyright Copyright (c) Clearbold, LLC
  *
- * Synch your Craft members or "people" entries with your Campaign Monitor subscriber lists.
+ * Synch your Craft members with your Campaign Monitor subscriber lists.
  *
  */
 
@@ -89,7 +89,6 @@ class SynchController extends Controller
         // CM Service has a batch limit of 1,000 users per API call
         // See https://www.campaignmonitor.com/api/subscribers/#importing-many-subscribers
         $response = CmSynch::getInstance()->campaignmonitor->importSubscribers($listId, $subscribers);
-        // var_dump($response); exit;
         if ($response['success'])
             Craft::$app->getSession()->setNotice($response['body']->TotalUniqueEmailsSubmitted . ' users synched');
         else

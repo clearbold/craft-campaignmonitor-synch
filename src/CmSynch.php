@@ -8,7 +8,6 @@ namespace clearbold\cmsynch;
 
 use clearbold\cmservice\services\CampaignMonitorService;
 use clearbold\cmsynch\variables\CmSynchVariable;
-// use clearbold\cmsynch\models\Settings;
 
 use Craft;
 use craft\base\Plugin;
@@ -71,16 +70,4 @@ class CmSynch extends Plugin
             __METHOD__
         );
     }
-
-    // protected function createSettingsModel()
-    // {
-    //     return new \clearbold\cmsynch\models\Settings();
-    // }
-
-    // protected function settingsHtml()
-    // {
-    //     return \Craft::$app->getView()->renderTemplate('cm-synch/settings', [
-    //         'settings' => $this->getSettings()
-    //     ]);
-    // }
 }
