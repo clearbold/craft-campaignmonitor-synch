@@ -6,9 +6,9 @@
 
 namespace clearbold\cmsynch;
 
-use clearbold\cmsynch\services\CampaignMonitorService;
+use clearbold\cmservice\services\CampaignMonitorService;
 use clearbold\cmsynch\variables\CmSynchVariable;
-use clearbold\cmsynch\models\Settings;
+// use clearbold\cmsynch\models\Settings;
 
 use Craft;
 use craft\base\Plugin;
@@ -41,7 +41,7 @@ class CmSynch extends Plugin
         self::$plugin = $this;
 
         $this->setComponents([
-            'campaignmonitor' => \clearbold\cmsynch\services\CampaignMonitorService::class,
+            'campaignmonitor' => \clearbold\cmservice\services\CampaignMonitorService::class,
         ]);
 
         Event::on(
@@ -72,15 +72,15 @@ class CmSynch extends Plugin
         );
     }
 
-    protected function createSettingsModel()
-    {
-        return new \clearbold\cmsynch\models\Settings();
-    }
+    // protected function createSettingsModel()
+    // {
+    //     return new \clearbold\cmsynch\models\Settings();
+    // }
 
-    protected function settingsHtml()
-    {
-        return \Craft::$app->getView()->renderTemplate('cm-synch/settings', [
-            'settings' => $this->getSettings()
-        ]);
-    }
+    // protected function settingsHtml()
+    // {
+    //     return \Craft::$app->getView()->renderTemplate('cm-synch/settings', [
+    //         'settings' => $this->getSettings()
+    //     ]);
+    // }
 }
