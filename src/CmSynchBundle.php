@@ -19,10 +19,8 @@ class CmSynchBundle extends AssetBundle
 {
     public function init()
     {
-        // define the path that your publishable resources live
         $this->sourcePath = '@clearbold/cmsynch/resources';
 
-        // define the dependencies
         $this->depends = [
             CpAsset::class,
         ];
