@@ -53,37 +53,20 @@ class SynchController extends Controller
         $criteria = json_decode($request->getParam('cmsynch-ruleCriteria'));
         $since = json_decode($request->getParam('cmsynch-ruleSince'));
         $mappings = json_decode($request->getParam('cmsynch-ruleFieldMappings'));
-        // var_dump($request->getParam('cmsynch-ruleSince'));
-        // var_dump($mappings); exit;
 
-        // $users = User::find()->all();
         $query = User::find();
-        // $users->group($groupList);
         $queryCriteria = array();
         foreach ($criteria as $key => $value) {
-            // Each key value is the handle for a custom field and the
-            // field value used as criteria
-            // $users->$key($value);
             $queryCriteria[$key] = "=$value";
         }
-        // var_dump($since->since); exit;
         if (strlen($since->since) > 0)
             $queryCriteria['dateUpdated'] = ">$since->since";
 
         Craft::configure($query, $queryCriteria);
         $users = $query->all();
 
-        // $users = User::find();
-        // $users->group($groupList);
-        // $users->all();
-
-        // var_dump($users); exit;
-
         $subscribers = array();
         foreach($users as $user) {
-            // echo '<br />'; echo($user->email); echo($user->fullName); echo($user->firstName); echo($user->lastName); echo '<br />';
-            // $field = "otherField";
-            // var_dump($user->$field); exit;
             $additionalFields = array();
             foreach($mappings as $key => $value) {
                 if ($value != 'EmailAddress' && $value != 'Name')
@@ -101,18 +84,16 @@ class SynchController extends Controller
             );
         }
         unset($user);
-        // var_dump($subscribers);
-        // exit;
 
         // Pass array of users to CM Service
         // CM Service has a batch limit of 1,000 users per API call
         // See https://www.campaignmonitor.com/api/subscribers/#importing-many-subscribers
         $response = CmSynch::getInstance()->campaignmonitor->importSubscribers($listId, $subscribers);
-
-        // var_dump($listId); exit;
-        // If all subscribers imported correctly, redirect to index page with flash message
-        // Else render report template
-        // return $request->getBodyParam('redirect') ? $this->redirectToPostedUrl() : $this->asJson($response);
+        // var_dump($response); exit;
+        if ($response['success'])
+            Craft::$app->getSession()->setNotice($response['body']->TotalUniqueEmailsSubmitted . ' users synched');
+        else
+            Craft::$app->getSession()->setError($response['reason']);
     }
 
     /**
