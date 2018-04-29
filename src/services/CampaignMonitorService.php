@@ -11,7 +11,7 @@ namespace clearbold\cmsynch\services;
 
 require_once CRAFT_VENDOR_PATH.'/campaignmonitor/createsend-php/csrest_subscribers.php';
 
-use clearbold\cmsynch\CmLists;
+use clearbold\cmsynch\CmSynch;
 
 use Craft;
 use craft\base\Component;
@@ -35,7 +35,7 @@ class CampaignMonitorService extends Component
      */
     public function importSubscribers($listId = '', $subscribers = array())
     {
-        $settings = CmLists::$plugin->getSettings();
+        $settings = CmSynch::$plugin->getSettings();
 
         try {
             $auth = array(
@@ -43,14 +43,10 @@ class CampaignMonitorService extends Component
             $client = new \CS_REST_Subscribers(
                 $listId,
                 $auth);
-
-            $result = $client->import($subscribers);
+            $result = $client->import($subscribers, false);
 
             if($result->was_successful()) {
-                $body = array();
-                // foreach ($result->response as $list) {
-                //     $body[] = $list;
-                // }
+                $body = $result->response;
                 return [
                     'success' => true,
                     'statusCode' => $result->http_status_code,
@@ -60,30 +56,9 @@ class CampaignMonitorService extends Component
                 return [
                     'success' => false,
                     'statusCode' => $result->http_status_code,
-                    'reason' => $result->response
+                    'reason' => $result->response->Message
                 ];
             }
-            /*
-            if($result->was_successful()) {
-                echo "Subscribed with results <pre>";
-                var_dump($result->response);
-            } else {
-                echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-                var_dump($result->response);
-                echo '</pre>';
-
-                if($result->response->ResultData->TotalExistingSubscribers > 0) {
-                    echo 'Updated '.$result->response->ResultData->TotalExistingSubscribers.' existing subscribers in the list';        
-                } else if($result->response->ResultData->TotalNewSubscribers > 0) {
-                    echo 'Added '.$result->response->ResultData->TotalNewSubscribers.' to the list';
-                } else if(count($result->response->ResultData->DuplicateEmailsInSubmission) > 0) { 
-                    echo $result->response->ResultData->DuplicateEmailsInSubmission.' were duplicated in the provided array.';
-                }
-
-                echo 'The following emails failed to import correctly.<pre>';
-                var_dump($result->response->ResultData->FailureDetails);
-            }
-            */
         } catch (\Exception $e) {
             return [
                 'success' => false,

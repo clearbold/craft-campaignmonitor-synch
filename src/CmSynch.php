@@ -41,7 +41,7 @@ class CmSynch extends Plugin
         self::$plugin = $this;
 
         $this->setComponents([
-            // 'campaignmonitor' => \clearbold\cmsynch\services\CampaignMonitorService::class,
+            'campaignmonitor' => \clearbold\cmsynch\services\CampaignMonitorService::class,
         ]);
 
         Event::on(

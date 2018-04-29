@@ -1,27 +1,86 @@
 {% extends "_layouts/cp" %}
 {% do view.registerAssetBundle("clearbold\\cmsynch\\CmSynchBundle") %}
 {% set title = "Campaign Monitor Synch"|t('app') %}
+{% import "_includes/forms" as forms %}
 
 {% block content %}
-<form id="clearbold-cm-synch" class="utility" method="get" accept-charset="UTF-8">
+<form id="clearbold-cm-synch" class="utility" method="post" accept-charset="UTF-8">
     {{ csrfInput() }}
     <input type="hidden" name="action" value="cm-synch/synch" />
-    <div class="field first">
-        <div class="heading">
-            <label class="required" for="cmsynch-listId">List ID</label>
-        </div>
-        <div class="input ltr">
-            <input class="text fullwidth" id="cmsynch-listId" type="text" name="listId" value="{{ '06b0df6a69364abc3ada4c988af0bbc4' }}" autocomplete="off" />
-        </div>
-    </div>
-    <div class="field">
-        {# <div class="heading">
-            <label class="required" for="cmsynch-listId">List ID</label>
-        </div>
-        <div class="input ltr">
-            <input class="text fullwidth" id="cmsynch-listId" type="text" name="listId" value="{{ '06b0df6a69364abc3ada4c988af0bbc4' }}" autocomplete="off" />
-        </div> #}
-    </div>
+
+    {{ forms.textField({
+        label: "List ID"|t('redirect'),
+        instructions: "From your Campaign Monitor subscriber list."|t(''),
+        id: 'cmsynch-listId',
+        class: 'ltr',
+        name: 'cmsynch-listId',
+        value: 'c5c700a17796c175f64c96b35e11f211',
+        autofocus: true,
+        required: true
+    }) }}
+{% set groupsJson %}
+{ "groups": ["members","test"] }
+{% endset %}
+    {{ forms.textareaField({
+        label: "Member Groups"|t('redirect'),
+        instructions: "If none are provided, all member groups will be included."|t(''),
+        id: 'cmsynch-ruleGroups',
+        class: 'ltr',
+        name: 'cmsynch-ruleGroups',
+        value: groupsJson,
+        autofocus: false,
+        required: false,
+        rows: 5
+    }) }}
+{% set criteriaJson %}
+{
+    "optIn": true,
+    "otherField": "some-value"
+}
+{% endset %}
+    {{ forms.textareaField({
+        label: "Criteria"|t('redirect'),
+        instructions: "Default or custom field criteria, where field=value."|t(''),
+        id: 'cmsynch-ruleCriteria',
+        class: 'ltr',
+        name: 'cmsynch-ruleCriteria',
+        value: criteriaJson,
+        autofocus: false,
+        required: false,
+        rows: 5
+    }) }}
+{% set sinceJson %}
+{"since": "2018-01-01"}
+{% endset %}
+    {{ forms.textareaField({
+        label: "Since"|t('redirect'),
+        instructions: "Only load users created since the provided date. All users will be loaded if omitted. YYYY-MM-DD."|t(''),
+        id: 'cmsynch-ruleSince',
+        class: 'ltr',
+        name: 'cmsynch-ruleSince',
+        value: sinceJson,
+        autofocus: false,
+        required: false,
+        rows: 5
+    }) }}
+{% set fieldMappingsJson %}
+{
+    "email": "EmailAddress",
+    "fullName": "Name",
+    "otherField": "CustomFieldCampaignMonitor"
+}
+{% endset %}
+    {{ forms.textareaField({
+        label: "Field Mappings"|t('redirect'),
+        instructions: "Identify source field to destination field mappings."|t(''),
+        id: 'cmsynch-ruleFieldMappings',
+        class: 'ltr',
+        name: 'cmsynch-ruleFieldMappings',
+        value: fieldMappingsJson,
+        autofocus: true,
+        required: true,
+        rows: 5
+    }) }}
     <div class="buttons">
         <input type="submit" class="btn submit" value="Test" />
     </div>

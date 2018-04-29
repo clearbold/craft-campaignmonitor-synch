@@ -33,23 +33,81 @@ class SynchController extends Controller
         $request = Craft::$app->getRequest();
 
         // Fetch list id from hidden input
-        $listId = $request->getRequiredBodyParam('listId') ? Craft::$app->security->validateData($request->post('listId')) : null;
+        $listId = $request->getRequiredBodyParam('cmsynch-listId') ? Craft::$app->security->validateData($request->post('cmsynch-listId')) : null;
 
         // Set params
         $params = [
 
         ];
 
-        $users = User::find()
-            ->group('members')
-            ->all();
-        foreach($users as $user) {
-            echo($user->email); echo($user->firstName); echo($user->lastName); exit;
+        $listId = $request->getParam('cmsynch-listId');
+
+        $groups = json_decode($request->getParam('cmsynch-ruleGroups'));
+        $groupList = '';
+        foreach ($groups->groups as $group) {
+            $groupList .= $group . ',';
         }
+        unset($group);
+        $groupList = substr($groupList, 0, -1);
+
+        $criteria = json_decode($request->getParam('cmsynch-ruleCriteria'));
+        $since = json_decode($request->getParam('cmsynch-ruleSince'));
+        $mappings = json_decode($request->getParam('cmsynch-ruleFieldMappings'));
+        // var_dump($request->getParam('cmsynch-ruleSince'));
+        // var_dump($mappings); exit;
+
+        // $users = User::find()->all();
+        $query = User::find();
+        // $users->group($groupList);
+        $queryCriteria = array();
+        foreach ($criteria as $key => $value) {
+            // Each key value is the handle for a custom field and the
+            // field value used as criteria
+            // $users->$key($value);
+            $queryCriteria[$key] = "=$value";
+        }
+        // var_dump($since->since); exit;
+        if (strlen($since->since) > 0)
+            $queryCriteria['dateUpdated'] = ">$since->since";
+
+        Craft::configure($query, $queryCriteria);
+        $users = $query->all();
+
+        // $users = User::find();
+        // $users->group($groupList);
+        // $users->all();
+
+        // var_dump($users); exit;
+
+        $subscribers = array();
+        foreach($users as $user) {
+            // echo '<br />'; echo($user->email); echo($user->fullName); echo($user->firstName); echo($user->lastName); echo '<br />';
+            // $field = "otherField";
+            // var_dump($user->$field); exit;
+            $additionalFields = array();
+            foreach($mappings as $key => $value) {
+                if ($value != 'EmailAddress' && $value != 'Name')
+                    $additionalFields[] = array(
+                        'Key' => $value,
+                        'Value' => $user->$key
+                    );
+            }
+            $email = $user->email;
+            $fullName = $user->fullName;
+            $subscribers[] = array(
+                'EmailAddress' => $email,
+                'Name' => $fullName,
+                'CustomFields' => $additionalFields
+            );
+        }
+        unset($user);
+        // var_dump($subscribers);
+        // exit;
 
         // Pass array of users to CM Service
         // CM Service has a batch limit of 1,000 users per API call
         // See https://www.campaignmonitor.com/api/subscribers/#importing-many-subscribers
+        $response = CmSynch::getInstance()->campaignmonitor->importSubscribers($listId, $subscribers);
 
         // var_dump($listId); exit;
         // If all subscribers imported correctly, redirect to index page with flash message
