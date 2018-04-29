@@ -1,8 +1,8 @@
 # Campaign Monitor Synch
 
-## Installation
-
 Synch your Craft members with your Campaign Monitor subscriber lists.
+
+## Installation
 
 To install:
 
