@@ -1,3 +1,7 @@
+## 0.3.0-alpha.1
+
+* Shifting to Campaign Monitor Service plugin for Campaign Monitor API wrapper and settings manager.
+
 ## 0.2.1-alpha.1 - 2018-04-28
 
 * Added success/error flash messages. Updated button to say "Synch" instead of "Test."

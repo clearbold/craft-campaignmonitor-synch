@@ -1,7 +1,7 @@
 {
     "name": "clearbold/craft-campaignmonitor-synch",
     "description": "Synch your Craft members or \"people\" entries with your Campaign Monitor subscriber lists.",
-    "version": "0.2.1-alpha.1",
+    "version": "0.3.0-alpha.1",
     "type": "craft-plugin",
     "homepage": "https://github.com/clearbold/craft-campaignmonitor-synch",
     "license": "proprietary",
@@ -23,7 +23,8 @@
     ],
     "require": {
         "craftcms/cms": "^3.0.1",
-        "campaignmonitor/createsend-php": "^5.1.3"
+        "campaignmonitor/createsend-php": "^5.1.3",
+        "clearbold/craft-campaignmonitor-service": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -43,5 +44,7 @@
         "developer": "Clearbold",
         "developerUrl": "http://clearbold.com/",
         "class": "clearbold\\cmsynch\\CmSynch"
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
