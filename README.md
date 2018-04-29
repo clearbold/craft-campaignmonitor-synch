@@ -1,5 +1,12 @@
 # Campaign Monitor Synch
+
 Synch your Craft members with your Campaign Monitor subscriber lists.
+
+To install:
+
+```
+composer require clearbold/craft-campaignmonitor-synch
+```
 
 There's lots more planned for this, but you can check it out and start using it today.
 
