@@ -32,13 +32,7 @@ class SynchController extends Controller
         $this->requirePostRequest();
         $request = Craft::$app->getRequest();
 
-        // Fetch list id from hidden input
         $listId = $request->getRequiredBodyParam('cmsynch-listId') ? Craft::$app->security->validateData($request->post('cmsynch-listId')) : null;
-
-        // Set params
-        $params = [
-
-        ];
 
         $listId = $request->getParam('cmsynch-listId');
 

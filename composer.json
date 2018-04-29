@@ -24,7 +24,7 @@
     "require": {
         "craftcms/cms": "^3.0.1",
         "campaignmonitor/createsend-php": "^5.1.3",
-        "clearbold/craft-campaignmonitor-service": "^1.0.2"
+        "clearbold/craft-campaignmonitor-service": "^1.0.3"
     },
     "autoload": {
         "psr-4": {
