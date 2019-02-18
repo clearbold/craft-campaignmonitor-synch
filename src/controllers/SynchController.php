@@ -1,6 +1,6 @@
 <?php
 /**
- * @link      https://github.com/clearbold/craft-campaignmonitor-lsynchists
+ * @link      https://github.com/clearbold/craft-campaignmonitor-synch
  * @copyright Copyright (c) Clearbold, LLC
  *
  * Synch your Craft members with your Campaign Monitor subscriber lists.

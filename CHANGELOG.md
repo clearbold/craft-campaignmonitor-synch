@@ -1,3 +1,7 @@
+## 0.3.2-alpha.1
+
+* Renaming Variable class filename to match convention.
+
 ## 0.3.1-alpha.1
 
 * Shifting to Campaign Monitor Service plugin for Campaign Monitor API wrapper and settings manager.
